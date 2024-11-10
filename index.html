@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(96,7,128,1) 35%, rgba(0,212,255,1) 100%);
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .container {
+            width: 500px;
+            background-color: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 170px;
+            margin-bottom: 30px;
+            color: white;
+            font-weight: 800;
+            font-size: 20px;
+            padding: 20px;
+            box-shadow: 8px 8px rgba(255, 255, 255, 0.6);
+        }
+        .content {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        input {
+            padding: 0px 10px;
+            width: 370px;
+            border-radius: 10px;
+            font-size: 17px;
+            border: none;
+            margin-right: 10px;
+            font-family: comic sans MS;
+        }
+        button {
+            height: 45px;
+            width: 110px;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: comic sans MS;
+        }
+        button:hover {
+            color: white;
+            background: linear-gradient(90deg, rgba(131,58,180,1) 9%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 87%);
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .task-buttons {
+            display: flex;
+            gap: 100px;
+        }
+        
+        .buttonContainer{
+            display: flex;
+            justify-content: space-around;
+        }
+        .remove-btn {
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            height: 40px;
+            width: 100px;
+        }
+        .completed-btn  {
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            height: 40px;
+            margin-left: 80px;
+            width: 100px;
+        }
+        .task-item{
+            width: 480px;
+            margin-right: 8px;
+            border-radius: 10px;
+            height: auto;
+        }
+        #heading{
+            font-size: 18px;
+            display: none;
+            color: black;
+            border-radius: 10px;
+            margin-top: 15px;
+            height: 50px;
+            gap: 280px;
+        }
+        #heading button{
+            background-color: white;
+            border: none;
+            height: 40px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>TO-DO LIST APPLICATION</p>
+        <div class="content">
+            <input id="input" autocomplete="off" type="text" placeholder="Add a new task..." required>
+            <button id="addbtn">Add</button>
+        </div>
+        <div id="status">
+            <div id="heading">
+            <button id="ah">All </button>
+            <button id="ch">Completed</button>
+        </div>
+        <div id="all-tasks">
+            
+            <div id="acontent"></div>
+        </div>
+        <div id="completed-tasks">
+            
+            <div id="ccontent"></div>
+        </div>
+        </div>
+    </div>
+    <script>
+        let input = document.getElementById("input");
+        let addButton = document.getElementById("addbtn");
+        let acontent = document.getElementById("acontent");
+        let ccontent = document.getElementById("ccontent");
+        let ah = document.getElementById("ah");
+        let ch = document.getElementById("ch");
+        let status = document.getElementById("status");
+        let heading = document.getElementById("heading");
+        // Initially hide "All" and "Completed" buttons
+        status.style.display = "none";
+        
+        // Show the tasks sections based on the tab clicked
+        ah.addEventListener("click", () => {
+            acontent.style.display = "block";
+            ccontent.style.display = "none";
+        });
+        ch.addEventListener("click", () => {
+            acontent.style.display = "none";
+            ccontent.style.display = "block";
+        });
+    
+        // Add task on button click
+        addButton.addEventListener("click", () => {
+            if (input.value.trim() !== "") {
+                // Show the status buttons
+                status.style.display = "block"; 
+                heading.style.display = "flex";  // Make sure the status section is visible
+                ah.style.display = "block";  // Ensure "All" button is visible
+                ch.style.display = "block";  // Ensure "Completed" button is visible
+                
+                // Create task item container
+                let taskItem = document.createElement("div");
+                taskItem.classList.add("task-item");
+    
+                // Add task text
+                let taskText = document.createElement("span");
+                taskText.textContent = input.value.trim();
+                taskItem.appendChild(taskText);
+    
+                // Buttons container
+                let buttonsContainer = document.createElement("div");
+                buttonsContainer.classList.add("task-buttons");
+    
+                // Add completed button
+                let completedButton = document.createElement("button");
+                completedButton.classList.add("completed-btn");
+                completedButton.textContent = "Completed";
+                completedButton.addEventListener("click", () => {
+                    // Move the task to completed section
+                    ccontent.appendChild(taskItem);  
+                    completedButton.remove();  // Remove "Completed" button after marking it completed
+                });
+    
+                // Add remove button
+                let removeButton = document.createElement("button");
+                removeButton.classList.add("remove-btn");
+                removeButton.textContent = "Remove";
+                removeButton.addEventListener("click", () => {
+                    taskItem.remove();
+                });
+    
+                // Append buttons to the buttons container
+                buttonsContainer.appendChild(completedButton);
+                buttonsContainer.appendChild(removeButton);
+    
+                // Append the buttons container to taskItem
+                taskItem.appendChild(buttonsContainer);
+    
+                // Append the task item to the All Tasks section
+                acontent.appendChild(taskItem);
+    
+                // Clear input field
+                input.value = "";
+            } else {
+                alert("Please enter a task");
+            }
+        });
+    </script>
+    
+</body>
+</html>
