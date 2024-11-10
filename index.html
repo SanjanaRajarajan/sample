@@ -166,6 +166,7 @@
         addButton.addEventListener("click", () => {
             if (input.value.trim() !== "") {
                 // Show the status buttons
+                set=true;
                 status.style.display = "block"; 
                 heading.style.display = "flex";  // Make sure the status section is visible
                 ah.style.display = "block";  // Ensure "All" button is visible
@@ -188,19 +189,10 @@
                 let completedButton = document.createElement("button");
                 completedButton.classList.add("completed-btn");
                 completedButton.textContent = "Completed";
-                completedButton.addEventListener("click", () => {
-                    // Move the task to completed section
-                    ccontent.appendChild(taskItem);  
-                    completedButton.remove();  // Remove "Completed" button after marking it completed
-                });
-    
                 // Add remove button
                 let removeButton = document.createElement("button");
                 removeButton.classList.add("remove-btn");
                 removeButton.textContent = "Remove";
-                removeButton.addEventListener("click", () => {
-                    taskItem.remove();
-                });
     
                 // Append buttons to the buttons container
                 buttonsContainer.appendChild(completedButton);
@@ -211,9 +203,19 @@
     
                 // Append the task item to the All Tasks section
                 acontent.appendChild(taskItem);
-    
-                // Clear input field
+                
+                completedButton.addEventListener("click", () => {
+                    // Move the task to completed section
+                    set=true;
+                    ccontent.appendChild(taskItem);  
+                    completedButton.remove();  
+                });
+                
+                removeButton.addEventListener("click", () => {
+                    taskItem.remove();
+                });
                 input.value = "";
+                if(!set) acontent.removeChild(taskText);
             } else {
                 alert("Please enter a task");
             }
